@@ -1,6 +1,8 @@
 package ru.rubiconepro.chatapp.Storage;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
 
 import ru.rubiconepro.chatapp.Model.IBase;
 
@@ -11,7 +13,7 @@ public interface IStorage <T extends IBase> {
     void updateElement(T element) throws Exception;
 
     T getElementByID(Integer id);
-    T getElementByField(String field, String value);
+    Collection<T> getElementByField(String field, String value);
 }
 
 

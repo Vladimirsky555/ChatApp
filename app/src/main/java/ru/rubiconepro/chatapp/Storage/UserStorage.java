@@ -1,5 +1,7 @@
 package ru.rubiconepro.chatapp.Storage;
 
+import java.util.Collection;
+
 import ru.rubiconepro.chatapp.Model.IUser;
 
 public class UserStorage implements IStorage <IUser> {
@@ -24,7 +26,7 @@ public class UserStorage implements IStorage <IUser> {
     }
 
     @Override
-    public IUser getElementByField(String field, String value) {
+    public Collection<IUser> getElementByField(String field, String value) {
         return null;
     }
 }
