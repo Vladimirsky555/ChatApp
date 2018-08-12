@@ -2,14 +2,19 @@ package ru.rubiconepro.chatapp.Communicator;
 
 import android.os.AsyncTask;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 import ru.rubiconepro.chatapp.Model.IUser;
 
-public class TCPConnector extends AsyncTask<Void, byte[], Void> implements ICommunicator {
+public class TCPConnector extends AsyncTask<Void, String, Void> implements ICommunicator {
     InputStream istr;
     OutputStream ostr;
 
@@ -20,7 +25,11 @@ public class TCPConnector extends AsyncTask<Void, byte[], Void> implements IComm
             protected Void doInBackground(String... strings) {
                 for (String s:strings
                      ) {
-                    ostr.write(s.getBytes());
+                    try {
+                        ostr.write(s.getBytes());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 return null;
@@ -43,18 +52,42 @@ public class TCPConnector extends AsyncTask<Void, byte[], Void> implements IComm
     @Override
     protected Void doInBackground(Void... voids) {
         Socket socket = new Socket();
-        socket.connect(InetAddress.getAllByName("192.168.71.2"));
+        try {
+            socket.connect(new InetSocketAddress("192.168.30.91", 60000));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
 
-        istr = socket.getInputStream();
-        ostr = socket.getOutputStream();
+        try {
+            istr = socket.getInputStream();
+            ostr = socket.getOutputStream();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
 
         while (true) {
-            byte[] input = new byte[10];
-            istr.read(input);
+            InputStreamReader inputReader = new InputStreamReader(istr);
+            BufferedReader sReader = new BufferedReader(inputReader);
 
-            publishProgress(input);
+            String str = "";
+            try {
+                str = sReader.readLine();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                break;
+            }
+
+            publishProgress(str);
         }
 
         return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+        //TODO отправить строки в наше приложение
+        //TODO создать интерфейс взаимодействия с приложением
     }
 }

@@ -31,23 +31,23 @@ public class UDPConnector extends AsyncTask<Void, byte[], Void> implements IComm
 
     @Override
     protected Void doInBackground(Void... voids) {
-        //TODO сделать отлов ошибок
-        // Используем DatagramSocket для сервера
-        soc = new DatagramSocket();
-
-        int bufSize = 1024;
-        byte[] buffer = new byte[bufSize];
-        DatagramPacket pac = new DatagramPacket(buffer, bufSize);
-        pac.setPort(8000);
-
-        //TODO сделать прослушивание сокета (добавить адрес, порт (8000))
-        //TODO сделать завершение цикла
-        //Вместо true какая то переменная, которая говорит о завершении
-        while (true/*TODO поставить переменную*/) {
-            soc.receive(pac);
-
-            publishProgress(pac.getData());
-        }
+//        //TODO сделать отлов ошибок
+//        // Используем DatagramSocket для сервера
+//        soc = new DatagramSocket();
+//
+//        int bufSize = 1024;
+//        byte[] buffer = new byte[bufSize];
+//        DatagramPacket pac = new DatagramPacket(buffer, bufSize);
+//        pac.setPort(8000);
+//
+//        //TODO сделать прослушивание сокета (добавить адрес, порт (8000))
+//        //TODO сделать завершение цикла
+//        //Вместо true какая то переменная, которая говорит о завершении
+//        while (true/*TODO поставить переменную*/) {
+//            soc.receive(pac);
+//
+//            publishProgress(pac.getData());
+//        }
 
 
         return null;
@@ -64,18 +64,18 @@ public class UDPConnector extends AsyncTask<Void, byte[], Void> implements IComm
     //*****************IConnector*********************
     @Override
     public void sendMessage(IUser user, String message) {
-        //TODO отправлять широковещательно
-        DatagramSocket s = new DatagramSocket();
-
-        byte[] b;// = new byte[10];
-        String str = "MyMessage";
-        b = str.getBytes();
-        DatagramPacket p = new DatagramPacket(b,
-                b.length,
-                InetAddress.getByName("255.255.255.255"),
-                8000);
-
-        s.send(p);
+//        //TODO отправлять широковещательно
+//        DatagramSocket s = new DatagramSocket();
+//
+//        byte[] b;// = new byte[10];
+//        String str = "MyMessage";
+//        b = str.getBytes();
+//        DatagramPacket p = new DatagramPacket(b,
+//                b.length,
+//                InetAddress.getByName("255.255.255.255"),
+//                8000);
+//
+//        s.send(p);
     }
 
     @Override
