@@ -128,17 +128,22 @@ public class Application {
                     try {
                         InputStream is = s.getInputStream();
                         InputStreamReader inputReader = new InputStreamReader(is);
-                        BufferedReader sReader = new BufferedReader(inputReader);
-
-                        while (true) {
-                            String message = sReader.readLine();
-                            if (message == null) break;
-                            sendToAll(message, s);
+                        try (BufferedReader sReader = new BufferedReader(inputReader)) {
+                            while (true) {
+                                String message = sReader.readLine();
+                                if (message == null) break;
+                                sendToAll(message, s);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
 
+                    try {
+                        s.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     sockets.remove(s);
                 }
             }).start();
