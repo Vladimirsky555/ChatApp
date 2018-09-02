@@ -1,5 +1,7 @@
 package ru.rubiconepro.chatapp.Communicator;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;
@@ -17,6 +19,12 @@ import ru.rubiconepro.chatapp.Model.IUser;
 public class TCPConnector extends AsyncTask<Void, String, Void> implements ICommunicator {
     InputStream istr;
     OutputStream ostr;
+
+    Context context;
+
+    public TCPConnector(Context context) {
+        this.context = context;
+    }
 
     @Override
     public void sendMessage(IUser user, String message) {
@@ -53,7 +61,7 @@ public class TCPConnector extends AsyncTask<Void, String, Void> implements IComm
     protected Void doInBackground(Void... voids) {
         Socket socket = new Socket();
         try {
-            socket.connect(new InetSocketAddress("192.168.30.91", 60000));
+            socket.connect(new InetSocketAddress("192.168.30.85", 60000));
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -67,13 +75,15 @@ public class TCPConnector extends AsyncTask<Void, String, Void> implements IComm
             return null;
         }
 
-        while (true) {
-            InputStreamReader inputReader = new InputStreamReader(istr);
-            BufferedReader sReader = new BufferedReader(inputReader);
+        InputStreamReader inputReader = new InputStreamReader(istr);
 
+        while (true) {
             String str = "";
             try {
-                str = sReader.readLine();
+                char[] buffer = new char[1024];
+                int readed = inputReader.read(buffer);
+
+                str = String.valueOf(buffer, 0, readed);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 break;
@@ -87,7 +97,12 @@ public class TCPConnector extends AsyncTask<Void, String, Void> implements IComm
 
     @Override
     protected void onProgressUpdate(String... values) {
-        //TODO отправить строки в наше приложение
-        //TODO создать интерфейс взаимодействия с приложением
+
+        for (String value : values) {
+            Intent i = new Intent();
+            i.setAction("ru.rubiconepro.chatapp.Communicator.resive");
+            i.putExtra("message", value);
+            context.sendBroadcast(i);
+        }
     }
 }

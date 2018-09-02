@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainAdapter extends BaseAdapter {
+public class MainAdapter extends BaseAdapter implements IMessage {
 
     private List<MessageModel> messages;
     private Context context;
